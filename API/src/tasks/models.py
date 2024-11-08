@@ -1,6 +1,7 @@
 from django.db import models # type: ignore
 from django.utils import timezone
 from datetime import timedelta
+from todoList.models import TodoList
 
 class TaskManager(models.Manager):
     def in_progress_tasks(self):
@@ -15,7 +16,7 @@ class TaskManager(models.Manager):
 class Task(models.Model):
     TASK_STATUS_CHOICES = [
         ("en cours", "En cours"),
-        ("terminé", "terminé"),
+        ("terminé", "Terminé"),
         ("validé", "Validé")
     ]
 
@@ -49,5 +50,9 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
+    todo_list = models.ForeignKey(TodoList, related_name="tasks", on_delete=models.CASCADE)
 
     objects = TaskManager()  # Manager personnalisé
+
+    def __str__(self):
+        return f"{self.title}, {self.description}"
