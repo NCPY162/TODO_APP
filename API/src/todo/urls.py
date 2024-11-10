@@ -37,6 +37,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tasks/', include('tasks.urls')),
     path('todos/', include('todoList.urls')),
+    path('users/', include('users.urls')),
     path('todo-api-doc/', schema_view.with_ui('swagger', cache_timeout=0), name="schema-swagger-ui"),
     path('todo-api-redoc/', schema_view.with_ui('redoc', cache_timeout=0), name="schema-redoc")
 ]

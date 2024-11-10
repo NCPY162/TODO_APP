@@ -80,13 +80,14 @@ class UpdateTaskAPIView(APIView):
     def put(self, request, task_id):
         try:
             existing_task = Task.objects.get(task_id=task_id)
-            serializer = TaskSerializer(existing_task, data=request.data, partial=True)
+            serializer = TaskSerializer(existing_task, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response({'message': 'La tâche a été mise à jour avec succès'}, 
                                     status=status.HTTP_200_OK)
             else:
-                return Response({'message': 'Merci de vérifier les données fournies pour la mise à jour'}, 
+                return Response({'message': 'Merci de vérifier les données fournies pour la mise à jour', 
+                                 "errors": serializer.errors}, 
                                     status=status.HTTP_400_BAD_REQUEST)
         except Task.DoesNotExist:
              return Response({'message' : 'La donnée à mettre à jour n\'existe pas'},

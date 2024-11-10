@@ -21,10 +21,11 @@ class CreateTodoListAPIView(APIView):
 
             if serializer.is_valid():
                 serializer.save()
-                return Response({"message": "La todo a été bien créée"}, 
+                return Response({"message": "La todo a été créée avec succès"}, 
                                 status=status.HTTP_201_CREATED)
             else:
-                return Response({"message": "Echec de création de la todo", "errors": serializer.errors},
+                return Response({"message": "Echec de création de la todo, merci de vérifier les valeurs fournies",
+                                "errors" : serializer.errors},
                                 status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"message":"Une erreur est survenue", "errors":str(e)}, 
@@ -50,10 +51,10 @@ class GetOneTodoAPIView(APIView):
         try:
             todo = TodoList.objects.get(todo_id=todo_id)
             serializer = TodoListSerializer(todo)
-            return Response({"message" : "Donnée todo récupérée avec succès", "todo": serializer.data},
+            return Response({"message" : "Données todos récupérées avec succès", "todo": serializer.data},
                                 status=status.HTTP_200_OK)  
         except TodoList.DoesNotExist : 
-            return Response({"message":"Donnée todo demandée est introuvable"}, 
+            return Response({"message":"La todo demandée est introuvable"}, 
                             status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"message":"Une erreur est survenue", "errors":str(e)}, 
@@ -70,7 +71,7 @@ class UpdateTodoListAPIView(APIView):
                 return Response({"message": "Donnée todo mise à jour avec succès"},
                             status=status.HTTP_200_OK)
             else:
-                return Response({"message": "Merci de vérifier les données fournies"},
+                return Response({"message": "Echec de mise à jour! Merci de vérifier les données fournies"},
                                 status=status.HTTP_400_BAD_REQUEST)
         except TodoList.DoesNotExist:
             return Response({"message" : "La todo à mettre à jour n'existe pas"},
