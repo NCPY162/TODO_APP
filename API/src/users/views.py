@@ -1,6 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from tokens.authentication import TokenAuthentication
 from .serializers import UserSerializer
 from .models import User
 
@@ -30,6 +32,8 @@ class CreateUserAPIView(APIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class GetAllUsersAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
             users = User.objects.all()
@@ -46,6 +50,9 @@ class GetAllUsersAPIView(APIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class GetOneUserAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, user_id):
         try:
             user = User.objects.get(user_id=user_id)
@@ -60,6 +67,9 @@ class GetOneUserAPIView(APIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class UpdateUserAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def put(self, request, user_id):
         try:
             existing_user = User.objects.get(user_id=user_id)
@@ -79,6 +89,9 @@ class UpdateUserAPIView(APIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class DeleteUserAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def delete(self, request, user_id):
         try:
             user = User.objects.get(user_id=user_id)

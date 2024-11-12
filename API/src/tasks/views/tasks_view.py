@@ -1,9 +1,11 @@
-from rest_framework.views import APIView # type: ignore
-from rest_framework.response import Response # type: ignore
-from rest_framework import status # type: ignore
+from rest_framework.views import APIView 
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated 
+from rest_framework import status 
 from drf_yasg.utils import swagger_auto_schema
-from ..serializers import TaskSerializer # type: ignore
-from ..models import Task # type: ignore
+from tokens.authentication import TokenAuthentication
+from ..serializers import TaskSerializer 
+from ..models import Task 
 
 class CreateTaskAPIView(APIView):
     """
@@ -14,6 +16,9 @@ class CreateTaskAPIView(APIView):
         - description : Description de la tâche (string)
         - status : Statut de la tâche (string, options : 'en cours', 'terminé', 'validé')
     """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @swagger_auto_schema(
         operation_description="Méthode permettant de créer une tâche",
         responses={201: TaskSerializer}
@@ -46,6 +51,10 @@ class CreateTaskAPIView(APIView):
     
 # Get tasks datas
 class GetAllTasksAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         try:
             tasks = Task.objects.all()
@@ -62,6 +71,10 @@ class GetAllTasksAPIView(APIView):
     
 # Get one task data
 class GetOneTaskAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, task_id):
         try:
             task = Task.objects.get(task_id=task_id)
@@ -77,6 +90,10 @@ class GetOneTaskAPIView(APIView):
         
 # Update task data
 class UpdateTaskAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def put(self, request, task_id):
         try:
             existing_task = Task.objects.get(task_id=task_id)
@@ -98,6 +115,10 @@ class UpdateTaskAPIView(APIView):
     
 # Delete task data
 class DeleteTaskAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def delete(self, request, task_id):
         try:
             existing_task = Task.objects.get(task_id=task_id)

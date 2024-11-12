@@ -30,5 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
         if "password" in validated_data:
             instance.password = make_password(validated_data.pop("password"))
         return super().update(instance, validated_data)
+    
+    
 
     

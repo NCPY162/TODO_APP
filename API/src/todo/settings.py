@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'tasks',
     'todoList',
     'users',
+    'tokens',
 ]
 
 MIDDLEWARE = [

@@ -1,10 +1,16 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from tokens.authentication import TokenAuthentication
 from .serializers import TodoListSerializer
 from .models import TodoList
 
 class CreateTodoListAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def post(self, request):
         todo = request.data
         try:
@@ -32,6 +38,10 @@ class CreateTodoListAPIView(APIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class GetAllTodosAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         try:
             todos = TodoList.objects.all()
@@ -47,6 +57,10 @@ class GetAllTodosAPIView(APIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class GetOneTodoAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, todo_id):
         try:
             todo = TodoList.objects.get(todo_id=todo_id)
@@ -61,6 +75,10 @@ class GetOneTodoAPIView(APIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class UpdateTodoListAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def put(self, request, todo_id):
         try:
             todo = request.data
@@ -81,6 +99,10 @@ class UpdateTodoListAPIView(APIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class DeleteTodoListAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def delete(self, request, todo_id):
         try:
             todo = TodoList.objects.get(todo_id=todo_id)
