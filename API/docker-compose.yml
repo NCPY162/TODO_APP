@@ -1,0 +1,52 @@
+version: '2'  # Version de Docker Compose utilisée
+
+services:
+  # Service pour la base de données PostgreSQL
+  db:
+    image: postgres:13  # Utilise l'image officielle de PostgreSQL version 13
+    environment:
+      # Variables d'environnement pour configurer la base de données PostgreSQL
+      POSTGRES_DB: ${POSTGRES_DB}       # Nom de la base de données, récupéré depuis le fichier .env
+      POSTGRES_USER: ${POSTGRES_USER}   # Nom d'utilisateur pour PostgreSQL, récupéré depuis le fichier .env
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Mot de passe pour PostgreSQL, récupéré depuis le fichier .env
+    volumes:
+      # Monte un volume pour stocker les données de la base en dehors du conteneur,
+      # ce qui permet de conserver les données même si le conteneur est recréé
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  # Expose le port 5432 pour permettre l'accès à PostgreSQL depuis l'extérieur
+    networks:
+      - app-network
+  
+  # Service pour l'api Django
+  api:
+    build: .  # Indique à Docker de construire l'image à partir du Dockerfile situé dans le même dossier
+    command: python ./src/manage.py runserver 0.0.0.0:8000  # Commande pour démarrer le serveur Django
+    volumes:
+      # Monte le répertoire actuel dans le conteneur pour que le code soit accessible et
+      # permette des mises à jour en temps réel sans reconstruire l'image
+      - .:/app
+    ports:
+      - "8085:8000"  # Expose le port 8000 pour accéder à l'application Django depuis le navigateur
+    depends_on:
+      - db  # Spécifie que le service 'web' dépend de 'db', ce qui garantit que 'db' est prêt avant le démarrage de 'web'
+    environment:
+      # Variables d'environnement pour la configuration de la base de données dans Django
+      DB_NAME: ${DB_NAME}      # Nom de la base de données, récupéré depuis le fichier .env
+      DB_USER: ${DB_USER}      # Nom d'utilisateur de la base de données, récupéré depuis le fichier .env
+      DB_PASSWORD: ${DB_PASSWORD} # Mot de passe pour la base de données, récupéré depuis le fichier .env
+      DB_HOST: db      # Hôte de la base de données, ici 'db' pour indiquer le service db
+      DB_PORT: 5432      # Port de la base de données
+    networks:
+      - app-network
+
+# Définition des volumes utilisés par les services
+volumes:
+  postgres_data:  # Volume nommé pour stocker les données de PostgreSQL
+
+networks:
+  app-network:
+    driver: bridge
+
+
+
