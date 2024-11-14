@@ -10,11 +10,11 @@ class CreateUserAPIView(APIView):
     def post(self, request):
         user = request.data
         if not user:
-            return Response({"message": "Aucune donnée reçue"})
+            return Response({"message": "Aucune donnée reçue"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            user_id = user.get('user_id')
-            if user_id and User.objects.filter(user_id=user_id).exists():
+            username = user.get('username')
+            if username and User.objects.filter(username=username).exists():
                 return Response({"message":"Cet utilisateur existe déjà en base"},
                                 status=status.HTTP_409_CONFLICT)
             
@@ -39,7 +39,7 @@ class GetAllUsersAPIView(APIView):
             users = User.objects.all()
             if users.exists():
                 serializer = UserSerializer(users, many=True)
-                return Response({"message": "Les données utilisateurs ont été récupérées avec succès", 
+                return Response({"message": "Les données utilisateur ont été récupérées avec succès", 
                              "users": serializer.data}, 
                             status=status.HTTP_200_OK)
             else: 
