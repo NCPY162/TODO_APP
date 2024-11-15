@@ -1,5 +1,3 @@
-version: '2'  # Version de Docker Compose utilisée
-
 services:
   # Service pour la base de données PostgreSQL
   db:
