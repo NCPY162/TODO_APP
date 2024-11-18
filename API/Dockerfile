@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copier le fichier de configuration pour postgresql et installer les dépendances systèmes
 RUN apt-get update && apt-get install -y libpq-dev gcc
-RUN apt-get update && apt-get install -y netcat
+RUN apt-get update && apt-get install -y netcat-openbsd
 
 # Copier le fichier requirements.txt pour installer les dépendances
 COPY requirements.txt .
