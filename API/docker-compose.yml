@@ -19,7 +19,7 @@ services:
   # Service pour l'api Django
   api:
     build: .  # Indique à Docker de construire l'image à partir du Dockerfile situé dans le même dossier
-    command: sh -c "python ./src/manage.py test && python ./src/manage.py runserver 0.0.0.0:8000"  # Commande pour démarrer les tests et le serveur Django
+    command: sh -c "python /app/src/manage.py test && python /app/src/manage.py runserver 0.0.0.0:8000"  # Commande pour démarrer les tests et le serveur Django
     volumes:
       # Monte le répertoire actuel dans le conteneur pour que le code soit accessible et
       # permette des mises à jour en temps réel sans reconstruire l'image
